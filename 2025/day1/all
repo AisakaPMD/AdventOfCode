@@ -1,0 +1,49 @@
+#!/bin/node
+
+const fs = require('fs');
+const inp = fs.readFileSync("input", "utf-8");
+
+const instrs = inp.split("\n").map(instr => (instr[0] == 'L' ? -1 : 1) * parseInt(instr.substring(1)));
+
+
+function mymod(a, b) {
+	if (b < 1) {
+		console.error("IllegalArgument: can't mod a negative number");
+		process.exit(1);
+	}
+	while (a < 0) {
+		a += b;
+	}
+	while (a >= b) {
+		a -= b;
+	}
+	return a;
+}
+function part1(ins) {
+	let knob = 50;
+	let res = 0;
+	for (const instruction of ins) {
+		knob += instruction;
+		knob = mymod(knob, 100);
+		if (knob == 0) res++;
+	}
+	return res;
+}
+function part2(ins) {
+	let knob = 50;
+	let res = 0;
+	for (const instruction of ins) {
+		let step = instruction > 0 ? 1 : -1;
+		let range = instruction > 0 ? instruction : -instruction;
+		for (let i = 0; i < range; i++) {
+			knob += step;
+			knob = mymod(knob, 100);
+			if (knob == 0) res++;
+		}
+	}
+	return res;
+}
+
+console.log("Part 1:", part1(instrs));
+console.log("Part 2:", part2(instrs));
+// console.log(instrs);
