@@ -1,0 +1,43 @@
+#!/bin/python3
+
+f = open("input")
+inp = f.read()
+f.close()
+entries = inp.split(",")
+ids = []
+for entry in entries:
+    a = int(entry.split("-")[0])
+    b = int(entry.split("-")[1])
+    ids += list(range(a, b+1))
+
+invalids = []
+for nb in ids:
+    sn = str(nb)
+    ln = len(sn)
+    cur = ln - 1
+    valid = True
+    while cur > 0:
+        if ln % cur != 0:
+            cur -= 1
+            continue
+        extract = sn[:cur]
+        checks = int(ln / cur)
+        ok = False
+        for i in range(checks):
+            ind = i * cur
+            if extract != sn[ind:ind+cur]:
+                ok = True
+                break
+        if not ok:
+            valid = False
+            break
+        cur -= 1
+    if not valid:
+        invalids += [nb]
+    
+total = 0
+for nb in invalids:
+    print("invalid:", nb)
+    total += nb
+
+print("total:", total)
